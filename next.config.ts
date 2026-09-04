@@ -8,11 +8,32 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
-      // URL eksternal lain (logo mitra, thumbnail Google Drive, dll)
-      // — hanya HTTPS, protokol HTTP tidak diizinkan
+      // Thumbnail dokumen Google Drive (logo mitra via Drive)
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "drive.google.com",
+      },
+      // Logo mitra dari situs lama (WordPress uploads)
+      {
+        protocol: "https",
+        hostname: "ppid.jamkridabali.co.id",
+      },
+      {
+        protocol: "https",
+        hostname: "www.jamkridabali.co.id",
+      },
+      {
+        protocol: "https",
+        hostname: "jamkridabali.co.id",
+      },
+      // Logo Pemprov Bali
+      {
+        protocol: "https",
+        hostname: "baliprov.go.id",
       },
     ],
   },

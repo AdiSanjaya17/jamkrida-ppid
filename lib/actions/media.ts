@@ -103,8 +103,11 @@ export async function addMediaFromUrl(
   }
 
   try {
-    // Validate URL format
-    new URL(url);
+    // Validate URL format + wajib HTTPS
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:") {
+      return { ok: false, error: "URL harus menggunakan protokol https://" };
+    }
 
     const media = await prisma.media.create({
       data: {

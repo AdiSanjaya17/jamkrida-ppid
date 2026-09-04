@@ -13,7 +13,9 @@ export type PublicNavItem = {
 
 export function SiteHeader({
   navItems,
-  overlay = false,
+  // Default true: semua halaman memakai navbar transparan di awal,
+  // berubah putih solid saat halaman di-scroll ke bawah.
+  overlay = true,
 }: {
   navItems: PublicNavItem[];
   overlay?: boolean;
@@ -51,27 +53,45 @@ export function SiteHeader({
 
   return (
     <>
-      <header className={`z-50 w-full ${navbarStyle}`}>
+      <header className={`z-50 w-full transition-all duration-300 ${navbarStyle}`}>
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center gap-3">
             {overlay && !isScrolled ? (
-              // Mode transparan di atas hero: logo diberi frame putih agar tetap terbaca
-              <span className="rounded-lg bg-white/95 px-3 py-2 shadow-sm backdrop-blur">
+              // Mode transparan di atas hero: logo tanpa frame + teks putih
+              <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/logo-ppid.png"
                   alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
                   className="h-10 w-auto"
                 />
-              </span>
+                <span className="hidden leading-tight sm:block">
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wide text-white">
+                    Pejabat Pengelola
+                  </span>
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wide text-white">
+                    Informasi dan Dokumentasi
+                  </span>
+                </span>
+              </>
             ) : (
-              // Logo asli PPID (dari situs lama, self-hosted di /public)
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src="/logo-ppid.png"
-                alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
-                className="h-12 w-auto"
-              />
+              // Navbar normal: logo + teks "Pejabat Pengelola Informasi dan Dokumentasi"
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo-ppid.png"
+                  alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
+                  className="h-11 w-auto"
+                />
+                <span className="hidden leading-tight sm:block">
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wide text-neutral-800">
+                    Pejabat Pengelola
+                  </span>
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wide text-neutral-800">
+                    Informasi dan Dokumentasi
+                  </span>
+                </span>
+              </>
             )}
           </Link>
 
@@ -86,13 +106,13 @@ export function SiteHeader({
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button
-                    className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold ${linkColor}`}
+                    className={`nav-link flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold ${linkColor}`}
                   >
                     {item.title}
                     <ChevronDown className="h-3.5 w-3.5" />
                   </button>
                   {openDropdown === item.id && (
-                    <div className="absolute left-0 top-full w-56 rounded-lg border border-neutral-200 bg-white py-2 shadow-lg">
+                    <div className="menu-enter absolute left-0 top-full w-56 rounded-lg border border-neutral-200 bg-white py-2 shadow-lg">
                       {item.children.map((child) => (
                         <Link
                           key={child.id}
@@ -109,7 +129,7 @@ export function SiteHeader({
                 <Link
                   key={item.id}
                   href={item.url ?? "#"}
-                  className={`rounded-md px-3 py-2 text-sm font-semibold ${linkColor}`}
+                  className={`nav-link rounded-md px-3 py-2 text-sm font-semibold ${linkColor}`}
                 >
                   {item.title}
                 </Link>
@@ -117,11 +137,10 @@ export function SiteHeader({
             )}
             <button
               aria-label="Cari"
-              className={`ml-2 rounded-full p-2.5 ${
-                isScrolled || !overlay
+              className={`ml-2 rounded-full p-2.5 ${isScrolled || !overlay
                   ? "text-neutral-600 hover:bg-neutral-100"
                   : "text-white hover:bg-white/10"
-              }`}
+                }`}
             >
               <Search className="h-4.5 w-4.5" />
             </button>
@@ -134,11 +153,10 @@ export function SiteHeader({
           </nav>
 
           <button
-            className={`rounded-md p-2 lg:hidden ${
-              isScrolled || !overlay
+            className={`rounded-md p-2 lg:hidden ${isScrolled || !overlay
                 ? "text-neutral-700 hover:bg-neutral-100"
                 : "text-white hover:bg-white/10"
-            }`}
+              }`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Buka menu"
           >
@@ -148,7 +166,7 @@ export function SiteHeader({
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <nav className="border-t border-neutral-200 bg-white px-4 py-3 lg:hidden">
+          <nav className="menu-enter border-t border-neutral-200 bg-white px-4 py-3 lg:hidden">
             {navItems.map((item) => (
               <div key={item.id} className="py-1">
                 <Link

@@ -304,3 +304,39 @@ model SiteSetting {
 
   @@map("site_settings")
 }
+
+// ==========================================================
+// PROFIL PEJABAT (Dewan Komisaris & Direksi) — tampil di /profil-pejabat
+// ==========================================================
+
+model Pejabat {
+  id       String  @id @default(cuid())
+  name     String
+  jabatan  String
+  photoUrl String
+  bio      String  @db.Text
+  category String // "KOMISARIS" | "DIREKSI"
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pejabat")
+}
+
+// ==========================================================
+// TIM KAMI — tampil di /tim-kami
+// ==========================================================
+
+model TeamMember {
+  id       String  @id @default(cuid())
+  name     String
+  role     String
+  photoUrl String
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("team_members")
+}

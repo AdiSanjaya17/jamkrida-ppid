@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   const password = process.env.SEED_ADMIN_PASSWORD;
   if (!password) {
-    console.warn(
-      "⚠️  SEED_ADMIN_PASSWORD tidak diset di .env — memakai password default yang TERTULIS DI KODE. Segera ganti password admin setelah login pertama!"
+    throw new Error(
+      "SEED_ADMIN_PASSWORD tidak diset. Tambahkan SEED_ADMIN_PASSWORD=<password-kuat> di file .env sebelum reset password."
     );
   }
-  const passwordHash = await bcrypt.hash(password ?? "Jamkridabali15", 10);
+  const passwordHash = await bcrypt.hash(password, 10);
   const user = await prisma.user.updateMany({
     where: { email: "admin@jamkridabali.co.id" },
     data: { passwordHash },

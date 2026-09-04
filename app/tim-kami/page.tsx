@@ -2,8 +2,12 @@ import { prisma } from "@/lib/prisma/client";
 import { SiteHeader, type PublicNavItem } from "@/components/public/site-header";
 import { SiteFooter } from "@/components/public/site-footer";
 import { PageBanner } from "@/components/public/page-banner";
+import { UserRound } from "lucide-react";
 
 export const metadata = { title: "Tim Kami" };
+
+// dynamic — data tim dikelola via CMS admin (/admin/tim)
+export const dynamic = "force-dynamic";
 
 export default async function TimKamiPage() {
   const [navItems, settings] = await Promise.all([
@@ -26,6 +30,11 @@ export default async function TimKamiPage() {
 
   const siteSettings = Object.fromEntries(settings.map((s) => [s.key, s.value]));
 
+  const teamMembers = await prisma.teamMember.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+  });
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader navItems={nav} />
@@ -38,6 +47,40 @@ export default async function TimKamiPage() {
             <p className="text-neutral-700">
               Unit Pelayanan Informasi Publik (PPID) kami terdiri dari tim profesional yang berdedikasi dalam memberikan pelayanan informasi publik berkualitas tinggi. Setiap anggota tim telah menerima pelatihan khusus tentang keterbukaan informasi publik dan hukum yang berlaku.
             </p>
+
+            {/* Frame foto tim — foto diupload via CMS admin (/admin/tim) */}
+            <div className="mt-8 grid grid-cols-2 gap-6 lg:grid-cols-4">
+              {teamMembers.map((m) => (
+                <div
+                  key={m.id}
+                  className="flex flex-col items-center rounded-2xl border border-neutral-200 bg-neutral-50 p-4"
+                >
+                  <div className="h-72 w-full overflow-hidden rounded-xl border-2 border-dashed border-brand/30 bg-white">
+                    {m.photoUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={m.photoUrl}
+                        alt={m.name}
+                        className="h-full w-full object-cover object-top"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-300">
+                        <UserRound className="h-10 w-10" />
+                        <span className="text-[11px] font-medium uppercase tracking-wider">
+                          Foto belum ada
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="mt-3 text-center text-sm font-bold text-neutral-900">
+                    {m.name}
+                  </p>
+                  {m.role ? (
+                    <p className="mt-1 text-center text-xs text-neutral-500">{m.role}</p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
 
             <div className="mt-8 space-y-6">
               <section>

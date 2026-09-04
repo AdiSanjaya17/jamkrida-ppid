@@ -13,6 +13,8 @@ const delegates = {
   statistic: prisma.statistic,
   partner: prisma.partner,
   page: prisma.page,
+  pejabat: prisma.pejabat,
+  teamMember: prisma.teamMember,
 } as const;
 
 export type ContentModel = keyof typeof delegates;
@@ -34,6 +36,8 @@ const fieldWhitelist: Record<ContentModel, string[]> = {
   statistic: ["title", "value", "description", "order", "isActive"],
   partner: ["name", "logoUrl", "websiteUrl", "order", "isActive"],
   page: ["title", "slug", "content", "seoTitle", "seoDescription", "isPublished"],
+  pejabat: ["name", "jabatan", "photoUrl", "bio", "category", "order", "isActive"],
+  teamMember: ["name", "role", "photoUrl", "order", "isActive"],
 };
 
 const numberFields = new Set(["year", "order", "overlayOpacity"]);
@@ -114,10 +118,14 @@ export async function saveContentItem(
     statistic: "/admin/statistics",
     partner: "/admin/partners",
     page: "/admin/pages",
+    pejabat: "/admin/pejabat",
+    teamMember: "/admin/tim",
   };
   revalidatePath(adminPaths[model]);
   revalidatePath("/");
   revalidatePath("/berita");
+  revalidatePath("/profil-pejabat");
+  revalidatePath("/tim-kami");
 }
 
 export async function deleteContentItem(model: ContentModel, id: string) {
@@ -135,8 +143,12 @@ export async function deleteContentItem(model: ContentModel, id: string) {
     statistic: "/admin/statistics",
     partner: "/admin/partners",
     page: "/admin/pages",
+    pejabat: "/admin/pejabat",
+    teamMember: "/admin/tim",
   };
   revalidatePath(adminPaths[model]);
   revalidatePath("/");
   revalidatePath("/berita");
+  revalidatePath("/profil-pejabat");
+  revalidatePath("/tim-kami");
 }

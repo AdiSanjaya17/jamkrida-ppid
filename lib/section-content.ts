@@ -64,8 +64,8 @@ export const sectionDefaults: Record<string, SectionData> = {
     panelKicker: "Ruang Layanan Informasi Publik",
     panelTitle: "Petugas Pelayanan Informasi",
     petugas: [
-      { initial: "W", name: "Si Wayan", role: "Petugas Pelayanan & Verifikasi" },
-      { initial: "M", name: "Si Made", role: "Petugas Dokumentasi & Arsip" },
+      { initial: "W", name: "Si Wayan", role: "Petugas Pelayanan & Verifikasi", url: "https://docs.google.com/forms/d/e/1FAIpQLSd1U6vWAij0ikw_vg9p4fT7eQLbyE4UJdhoPAuvHKOwn_7ntw/viewform" },
+      { initial: "M", name: "Si Made", role: "Petugas Dokumentasi & Arsip", url: "https://docs.google.com/forms/d/e/1FAIpQLSeF7jffc5eq1v8FA7sKDX05e8wYze6mnh76c2ccnm5jxy6lgg/viewform" },
     ],
     channelsTitle: "Titik Akses & Kanal Komunikasi:",
     channels: [
@@ -83,7 +83,7 @@ export const sectionDefaults: Record<string, SectionData> = {
       { label: "Tingkat Penyelesaian", value: "", source: "" },
     ],
     footnote:
-      "Angka riil akan ditampilkan otomatis begitu sistem data aktif — tanpa angka rekayasa.",
+      "",
   },
   berita_terbaru: {
     kicker: "Publikasi & Berita",
@@ -120,8 +120,8 @@ function normalize(key: string, data: SectionData): SectionData {
       time: out[`sched${i}Time`] ?? "",
     }));
     out.petugas = [
-      { initial: out.petugas1Initial ?? "W", name: out.petugas1Name ?? "Si Wayan", role: out.petugas1Role ?? "" },
-      { initial: out.petugas2Initial ?? "M", name: out.petugas2Name ?? "Si Made", role: out.petugas2Role ?? "" },
+      { initial: out.petugas1Initial ?? "W", name: out.petugas1Name ?? "Si Wayan", role: out.petugas1Role ?? "", url: out.petugas1Url ?? "" },
+      { initial: out.petugas2Initial ?? "M", name: out.petugas2Name ?? "Si Made", role: out.petugas2Role ?? "", url: out.petugas2Url ?? "" },
     ];
     out.channels = [
       { icon: "address", label: out.channelAddressLabel ?? "Ruang Layanan Langsung:" },

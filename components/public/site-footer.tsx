@@ -20,9 +20,12 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-sm font-bold">
-              PPID
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-ppid.png"
+              alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
+              className="h-11 w-auto"
+            />
             <p className="font-bold">PPID Jamkrida Bali</p>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-white/70">

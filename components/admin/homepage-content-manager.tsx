@@ -181,7 +181,7 @@ function NewsContentTab() {
       )}
 
       <p className="text-sm text-neutral-500">
-        💡 Berita akan otomatis ditampilkan di section "Berita Terbaru" jika status PUBLISHED
+        💡 Berita akan otomatis ditampilkan di section &quot;Berita Terbaru&quot; jika status PUBLISHED
       </p>
     </div>
   );
@@ -301,7 +301,7 @@ function PartnersContentTab() {
       )}
 
       <p className="text-sm text-neutral-500">
-        💡 Mitra akan ditampilkan di section "Mitra Kami" dengan logo dalam grid
+        💡 Mitra akan ditampilkan di section &quot;Mitra Kami&quot; dengan logo dalam grid
       </p>
     </div>
   );

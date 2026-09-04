@@ -96,8 +96,8 @@ sectionContents.layanan_ppid = {
     panelKicker: "Ruang Layanan Informasi Publik",
     panelTitle: "Petugas Pelayanan Informasi",
     petugas: [
-      { initial: "W", name: "Si Wayan", role: "Petugas Pelayanan & Verifikasi" },
-      { initial: "M", name: "Si Made", role: "Petugas Layanan Informasi" },
+      { initial: "W", name: "Si Wayan", role: "Petugas Pelayanan & Verifikasi", url: "https://docs.google.com/forms/d/e/1FAIpQLSd1U6vWAij0ikw_vg9p4fT7eQLbyE4UJdhoPAuvHKOwn_7ntw/viewform" },
+      { initial: "M", name: "Si Made", role: "Petugas Layanan Informasi", url: "https://docs.google.com/forms/d/e/1FAIpQLSeF7jffc5eq1v8FA7sKDX05e8wYze6mnh76c2ccnm5jxy6lgg/viewform" },
     ],
     channelsTitle: "Titik Akses & Kanal Komunikasi:",
     channelAddressLabel: "Ruang Layanan Langsung:",

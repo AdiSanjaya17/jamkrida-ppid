@@ -349,26 +349,47 @@ export default async function HomePage() {
                        initial: str(layananPetugas[0]?.initial, "W"),
                        name: str(layananPetugas[0]?.name, ""),
                        role: str(layananPetugas[0]?.role, ""),
+                        url: str(layananPetugas[0]?.url, "https://docs.google.com/forms/d/e/1FAIpQLSd1U6vWAij0ikw_vg9p4fT7eQLbyE4UJdhoPAuvHKOwn_7ntw/viewform"),
                      },
                      {
                        initial: str(layananPetugas[1]?.initial, "M"),
                        name: str(layananPetugas[1]?.name, ""),
                        role: str(layananPetugas[1]?.role, ""),
+                        url: str(layananPetugas[1]?.url, "https://docs.google.com/forms/d/e/1FAIpQLSeF7jffc5eq1v8FA7sKDX05e8wYze6mnh76c2ccnm5jxy6lgg/viewform"),
                      },
-                    ].map((p, idx) => (
-                      <div
-                        key={`petugas-${idx}`}
-                        className="flex items-center gap-3 rounded-xl border border-neutral-200 p-4"
-                      >
-                       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
-                         {p.initial}
-                       </div>
-                       <div>
-                         <p className="text-sm font-bold text-neutral-900">{p.name}</p>
-                         <p className="text-xs text-neutral-500">{p.role}</p>
-                       </div>
-                     </div>
-                   ))}
+                    ].map((p, idx) => {
+                      const inner = (
+                        <>
+                          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
+                            {p.initial}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-neutral-900 group-hover:text-brand">
+                              {p.name}
+                            </p>
+                            <p className="text-xs text-neutral-500">{p.role}</p>
+                          </div>
+                        </>
+                      );
+                      const cls =
+                        "group flex items-center gap-3 rounded-xl border border-neutral-200 p-4 transition duration-200";
+                      return p.url ? (
+                        <a
+                          key={`petugas-${idx}`}
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={`Buka layanan ${p.name}`}
+                          className={`${cls} cursor-pointer hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md`}
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        <div key={`petugas-${idx}`} className={cls}>
+                          {inner}
+                        </div>
+                      );
+                    })}
                  </div>
 
                  <div className="mt-8 space-y-4 border-t border-neutral-100 pt-6 text-sm">
@@ -411,7 +432,7 @@ export default async function HomePage() {
 
         {/* Statistik band */}
         {activeKeys.has("statistik") && (
-          <section className="bg-brand py-16 text-white lg:py-20">
+          <section className="pattern-bali bg-brand py-16 text-white lg:py-20">
             <div className="mx-auto max-w-7xl px-4 lg:px-8">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {(statistics && statistics.length > 0

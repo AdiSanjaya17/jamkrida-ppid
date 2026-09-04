@@ -9,7 +9,7 @@ export type PageBannerProps = {
 
 export function PageBanner({ title, breadcrumb }: PageBannerProps) {
   return (
-    <div className="w-full bg-[#003B8E] py-24">
+    <div className="pattern-bali w-full bg-[#003B8E] pb-24 pt-36">
       <div className="mx-auto max-w-7xl px-4 text-center lg:px-8">
         <div className="text-white font-urbanist">
           {breadcrumb && breadcrumb.length > 0 && (

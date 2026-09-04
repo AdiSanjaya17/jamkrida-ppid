@@ -10,3 +10,91 @@
     @apply bg-neutral-50 text-neutral-900;
   }
 }
+
+/* Transisi halaman — ringan: fade + geser 8px, ease-out lembut */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Underline bergerak pada link navigasi desktop (hover) */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.65;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Dropdown & menu mobile: muncul dengan fade + geser kecil */
+@keyframes menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.menu-enter {
+  animation: menu-enter 0.2s ease-out both;
+}
+
+/* Pattern batik Bali (hitam-putih) untuk background biru.
+   Teknik: mix-blend-mode screen — piksel hitam pattern menjadi transparan
+   di atas warna biru, hanya ornamen putihnya yang tampil.
+   File: /public/pattern-bali.png */
+.pattern-bali {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.pattern-bali::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/pattern-bali.png");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Hormati preferensi pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .menu-enter {
+    animation: none;
+  }
+  .nav-link::after {
+    transition: none;
+  }
+}

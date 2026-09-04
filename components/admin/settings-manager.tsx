@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Save, Trash2, Loader2, Plus, Sparkles, RefreshCw } from "lucide-react";
 import { saveSiteSetting, deleteSiteSetting } from "@/lib/actions/settings";
-import { populateRealJamkridaData } from "@/lib/actions/seed-data";
+import { syncRealJamkridaData } from "@/lib/actions/seed-data";
 
 export type SettingRow = { key: string; value: string };
 
@@ -33,7 +33,7 @@ export function SettingsManager({ settings }: { settings: SettingRow[] }) {
     if (!confirm("Muat dan sinkronkan data objek penting dari website PPID Jamkrida Bali?")) return;
     setIsSyncing(true);
     try {
-      const res = await populateRealJamkridaData();
+      const res = await syncRealJamkridaData();
       toast.success(res.message || "Data PPID berhasil disinkronisasi!");
       window.location.reload();
     } catch {

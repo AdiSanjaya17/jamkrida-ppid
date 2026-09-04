@@ -12,6 +12,8 @@ import {
   Wrench,
   BarChart3,
   Handshake,
+  Users,
+  UserRound,
   Image,
   Settings,
   ExternalLink,
@@ -45,6 +47,8 @@ const navGroups = [
       { href: "/admin/services", label: "Layanan", icon: Wrench },
       { href: "/admin/statistics", label: "Statistik", icon: BarChart3 },
       { href: "/admin/partners", label: "Mitra", icon: Handshake },
+      { href: "/admin/pejabat", label: "Profil Pejabat", icon: Users },
+      { href: "/admin/tim", label: "Tim Kami", icon: UserRound },
       { href: "/admin/media", label: "Media Library", icon: Image },
       { href: "/admin/settings", label: "Pengaturan", icon: Settings },
     ],
@@ -80,11 +84,10 @@ export function AdminSidebar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
-                        isActive
-                          ? "bg-white/15 font-semibold text-white"
-                          : "text-white/70 hover:bg-white/10 hover:text-white"
-                      }`}
+                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${isActive
+                        ? "bg-white/15 font-semibold text-white"
+                        : "text-white/70 hover:bg-white/10 hover:text-white"
+                        }`}
                     >
                       <item.icon className="h-4 w-4 shrink-0" />
                       {item.label}
