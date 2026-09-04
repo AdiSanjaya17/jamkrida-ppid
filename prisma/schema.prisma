@@ -1,0 +1,306 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================================
+// AUTH (Auth.js) — satu-satunya role: ADMIN
+// ==========================================================
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  accounts     Account[]
+  sessions     Session[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// ==========================================================
+// NAVIGASI — mendukung nested menu (mis. Tentang > Profil PPID > Visi & Misi)
+// dan "Pedoman PPID" yang ada di situs lama tapi absen di brief awal
+// ==========================================================
+
+model NavigationItem {
+  id        String           @id @default(cuid())
+  title     String
+  slug      String?
+  url       String?
+  icon      String?
+  order     Int              @default(0)
+  isActive  Boolean          @default(true)
+  parentId  String?
+  parent    NavigationItem?  @relation("NavChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children  NavigationItem[] @relation("NavChildren")
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([parentId])
+  @@map("navigation_items")
+}
+
+// ==========================================================
+// HALAMAN STATIS (Profil PPID, Sejarah, Struktur Organisasi, dll)
+// ==========================================================
+
+model Page {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  content        String   @db.Text
+  seoTitle       String?
+  seoDescription String?
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("pages")
+}
+
+// ==========================================================
+// HOMEPAGE
+// ==========================================================
+
+model HomepageSection {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String?
+  subtitle  String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  content   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("homepage_sections")
+}
+
+model HeroSlide {
+  id                String   @id @default(cuid())
+  title             String
+  subtitle          String?
+  description       String?  @db.Text
+  backgroundUrl     String
+  overlayColor      String?  @default("#003B8E")
+  overlayOpacity    Float    @default(0.5)
+  ctaLabel          String?
+  ctaUrl            String?
+  ctaLabelSecondary String?
+  ctaUrlSecondary   String?
+  order             Int      @default(0)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("hero_slides")
+}
+
+// ==========================================================
+// BERITA
+// ==========================================================
+
+model News {
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  excerpt        String?
+  content        String        @db.Text
+  thumbnailUrl   String?
+  images         String        @db.Text
+  category       String?
+  status         ContentStatus @default(DRAFT)
+  publishedAt    DateTime?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+  @@map("news")
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// ==========================================================
+// DOKUMEN
+// ==========================================================
+
+model Document {
+  id                 String              @id @default(cuid())
+  title              String
+  category           String
+  description        String?             @db.Text
+  year               Int
+  fileUrl            String
+  fileType           String?
+  publicationDate    DateTime?
+  status             ContentStatus       @default(PUBLISHED)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  publicInformations PublicInformation[]
+
+  @@index([category, year])
+  @@map("documents")
+}
+
+// ==========================================================
+// INFORMASI PUBLIK (Berkala / Setiap Saat / Serta Merta / Dikecualikan)
+// ==========================================================
+
+model PublicInformation {
+  id              String              @id @default(cuid())
+  title           String
+  category        InformationCategory
+  description     String?             @db.Text
+  content         String?             @db.Text
+  documentId      String?
+  document        Document?           @relation(fields: [documentId], references: [id])
+  year            Int?
+  publicationDate DateTime?
+  status          ContentStatus       @default(PUBLISHED)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([category])
+  @@map("public_information")
+}
+
+enum InformationCategory {
+  BERKALA
+  SETIAP_SAAT
+  SERTA_MERTA
+  DIKECUALIKAN
+}
+
+// ==========================================================
+// LAYANAN (Permohonan Informasi, Keberatan, Pengaduan, Sengketa)
+// ==========================================================
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String   @db.Text
+  icon        String?
+  formUrl     String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+// ==========================================================
+// STATISTIK
+// ==========================================================
+
+model Statistic {
+  id          String   @id @default(cuid())
+  title       String
+  value       String
+  description String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("statistics")
+}
+
+// ==========================================================
+// MITRA
+// ==========================================================
+
+model Partner {
+  id         String   @id @default(cuid())
+  name       String
+  logoUrl    String
+  websiteUrl String?
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("partners")
+}
+
+// ==========================================================
+// MEDIA LIBRARY
+// ==========================================================
+
+model Media {
+  id         String    @id @default(cuid())
+  url        String
+  publicId   String // Cloudinary public_id, untuk delete/reuse
+  type       MediaType
+  altText    String?
+  fileName   String?
+  fileSizeKb Int?
+  createdAt  DateTime  @default(now())
+
+  @@map("media")
+}
+
+enum MediaType {
+  IMAGE
+  DOCUMENT
+}
+
+// ==========================================================
+// PENGATURAN SITUS (Footer, kontak, sosial media, dll)
+// ==========================================================
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique // logo_url, company_description, address, phone, email, facebook_url, dst.
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
