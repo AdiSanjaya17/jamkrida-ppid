@@ -109,7 +109,7 @@ export default async function PedomanPPIDPage() {
               <div className="mt-4 space-y-2 text-sm text-neutral-700">
                 <p><strong>Email:</strong> {siteSettings.email || "ppid@jamkridabali.co.id"}</p>
                 <p><strong>Telepon:</strong> {siteSettings.phone || "(0361) 000000"}</p>
-                <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Raya Puputan No. 3, Denpasar, Bali"}</p>
+                <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}</p>
               </div>
             </div>
           </div>

@@ -40,7 +40,7 @@ export default async function KontakPage() {
               <div className="mt-6 space-y-4 text-sm text-neutral-700">
                 <div>
                   <p className="font-semibold text-neutral-900">Alamat</p>
-                  <p className="mt-1">{siteSettings.address || "Jl. Raya Puputan No. 3, Denpasar, Bali 80234"}</p>
+                  <p className="mt-1">{siteSettings.address || "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}</p>
                 </div>
                 <div>
                   <p className="font-semibold text-neutral-900">Telepon</p>

@@ -397,7 +397,7 @@ export default async function HomePage() {
                    <p className="flex items-center gap-3 text-neutral-700">
                      <MapPin className="h-4 w-4 shrink-0 text-brand-gold-dark" />
                      <span className="font-semibold text-neutral-900">{str(scLayanan.channelAddressLabel, "")}</span>
-                    {siteSettings.address ?? "Jl. Surapati No 8 Denpasar, Bali 80232"}
+                    {siteSettings.address ?? "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}
                   </p>
                    <p className="flex items-center gap-3 text-neutral-700">
                      <Phone className="h-4 w-4 shrink-0 text-brand-gold-dark" />
@@ -435,14 +435,14 @@ export default async function HomePage() {
           <section className="pattern-bali bg-brand py-16 text-white lg:py-20">
             <div className="mx-auto max-w-7xl px-4 lg:px-8">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {(statistics && statistics.length > 0
-                  ? statistics.map((s) => ({ label: s.title, value: s.value }))
-                  : [
-                      { label: statItemsFallback[0]?.label || "Dokumen Publik", value: docCount > 0 ? String(docCount) : null },
-                      { label: statItemsFallback[1]?.label || "Informasi Tersedia", value: infoCount > 0 ? String(infoCount) : null },
-                      { label: statItemsFallback[2]?.label || "Permohonan Informasi", value: statItemsFallback[2]?.value || null },
-                      { label: statItemsFallback[3]?.label || "Tingkat Penyelesaian", value: statItemsFallback[3]?.value || null },
-                    ]
+                {((statistics ?? [])
+                  .filter(
+                    (s) =>
+                      !["Statistik Kepegawaian", "Laba Rugi", "Pertumbuhan Aset"].includes(
+                        s.description ?? ""
+                      )
+                  )
+                  .map((s) => ({ label: s.title, value: s.value }))
                 ).map((stat, idx) => (
                   <div
                     key={`stat-${idx}-${stat.label || idx}`}
@@ -462,10 +462,17 @@ export default async function HomePage() {
                   </div>
                 ))}
               </div>
-              <p className="mt-10 text-center text-sm text-white/50">
-                Angka riil akan ditampilkan otomatis begitu sistem data aktif — tanpa
-                angka rekayasa.
-              </p>
+              <div className="mt-10 text-center">
+                <Link
+                  href="/statistik"
+                  className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-6 py-3 text-sm font-bold text-brand-dark shadow-sm transition hover:bg-brand-gold-light"
+                >
+                  Lihat Statistik Lengkap
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </section>
         )}

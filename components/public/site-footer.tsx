@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone, Facebook, Instagram, Youtube } from "lucide-react"
 export type SiteSettings = Record<string, string>;
 
 const defaults: SiteSettings = {
-  address: "Jl. Raya Puputan No. 3, Denpasar, Bali",
+  address: "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232",
   phone: "(0361) 000000",
   email: "ppid@jamkridabali.co.id",
   company_description:

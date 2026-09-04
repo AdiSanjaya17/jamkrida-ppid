@@ -66,7 +66,7 @@ export default async function PengaduanPage() {
                   </a>
                 </p>
                 <p><strong>Telepon:</strong> {siteSettings.phone || "(0361) 000000"}</p>
-                <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Raya Puputan No. 3, Denpasar, Bali"}</p>
+                <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}</p>
               </div>
             </section>
 

@@ -122,7 +122,7 @@ export default async function TimKamiPage() {
                     <strong>Telepon:</strong> {siteSettings.phone || "(0361) 000000"}
                   </p>
                   <p className="mt-2 text-sm text-neutral-700">
-                    <strong>Alamat:</strong> {siteSettings.address || "Jl. Raya Puputan No. 3, Denpasar, Bali"}
+                    <strong>Alamat:</strong> {siteSettings.address || "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}
                   </p>
                 </div>
               </section>

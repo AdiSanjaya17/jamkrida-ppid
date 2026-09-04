@@ -165,7 +165,7 @@ async function main() {
       value:
         "Unit Pelayanan Informasi Publik PT Jamkrida Bali Mandara (Perseroda) — mengawal transparansi informasi publik sesuai UU No. 14 Tahun 2008.",
     },
-    { key: "address", value: "Jl. Raya Puputan No. 3, Denpasar, Bali 80234" },
+    { key: "address", value: "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232" },
     { key: "phone", value: "(0361) 000000" },
     { key: "email", value: "ppid@jamkridabali.co.id" },
     { key: "facebook_url", value: "https://facebook.com/jamkridabali" },
@@ -344,6 +344,54 @@ async function main() {
       await prisma.news.create({
         data: { ...item, category: "CSR", status: "PUBLISHED", images: "[]" },
       });
+    }
+  }
+
+  // --- Dummy Statistik (edit via CMS /admin/statistics) ---
+  // Grup ditentukan lewat field "description": Statistik Kepegawaian | Laba Rugi | Pertumbuhan Aset
+  const statGroups: Array<{ group: string; rows: Array<[string, string]> }> = [
+    {
+      group: "Statistik Kepegawaian",
+      rows: [
+        ["2020", "38"],
+        ["2021", "41"],
+        ["2022", "45"],
+        ["2023", "48"],
+        ["2024", "52"],
+      ],
+    },
+    {
+      group: "Laba Rugi",
+      rows: [
+        ["2020", "25"],
+        ["2021", "31"],
+        ["2022", "38"],
+        ["2023", "44"],
+        ["2024", "51"],
+      ],
+    },
+    {
+      group: "Pertumbuhan Aset",
+      rows: [
+        ["2020", "310"],
+        ["2021", "352"],
+        ["2022", "405"],
+        ["2023", "468"],
+        ["2024", "540"],
+      ],
+    },
+  ];
+  for (const g of statGroups) {
+    for (let i = 0; i < g.rows.length; i++) {
+      const [year, value] = g.rows[i];
+      const existing = await prisma.statistic.findFirst({
+        where: { title: year, description: g.group },
+      });
+      if (!existing) {
+        await prisma.statistic.create({
+          data: { title: year, value, description: g.group, order: i },
+        });
+      }
     }
   }
 

@@ -383,7 +383,7 @@ export async function populateRealJamkridaData() {
       key: "company_description",
       value: "Unit Pelayanan Informasi Publik PT Jamkrida Bali Mandara (Perseroda) — mengawal transparansi informasi publik, tata kelola perusahaan yang bersih, serta akuntabilitas penjaminan daerah sesuai UU No. 14 Tahun 2008.",
     },
-    { key: "address", value: "Jl. Raya Puputan No. 3, Renon, Denpasar, Bali 80234" },
+    { key: "address", value: "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232" },
     { key: "phone", value: "+6282144702922" },
     { key: "email", value: "ppid@jamkridabali.co.id" },
     { key: "facebook_url", value: "https://www.facebook.com/jamkridabali" },

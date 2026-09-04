@@ -78,7 +78,7 @@ export default async function PermohonantInformasiPage() {
           <div className="mt-10 rounded-lg border border-neutral-200 bg-neutral-50 p-6">
             <h3 className="font-semibold text-neutral-900">Kontak PPID</h3>
             <div className="mt-4 space-y-2 text-sm text-neutral-700">
-              <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Raya Puputan No. 3, Denpasar, Bali"}</p>
+              <p><strong>Alamat:</strong> {siteSettings.address || "Jl. Surapati No.8, Dangin Puri, Kecamatan Denpasar Timur, Kota Denpasar, Bali 80232"}</p>
               <p><strong>Telepon:</strong> {siteSettings.phone || "(0361) 000000"}</p>
               <p><strong>Email:</strong> {siteSettings.email || "ppid@jamkridabali.co.id"}</p>
             </div>
