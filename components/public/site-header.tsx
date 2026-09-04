@@ -48,35 +48,31 @@ export function SiteHeader({
   const linkColor = isScrolled || !overlay
     ? "text-neutral-700 hover:bg-neutral-100 hover:text-brand"
     : "text-white/90 hover:bg-white/10 hover:text-white";
-  
-  const textColor = isScrolled || !overlay ? "text-brand-dark" : "text-white";
-  const logoColor = isScrolled || !overlay 
-    ? "bg-brand text-white" 
-    : "bg-brand-gold text-brand-dark";
 
   return (
     <>
       <header className={`z-50 w-full ${navbarStyle}`}>
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-bold ${logoColor}`}>
-              PPID
-            </div>
-            <div className="leading-tight">
-              <p className={`text-base font-bold ${textColor}`}>
-                PT Jamkrida Bali Mandara
-              </p>
-              {!isScrolled && overlay && (
-                <p className="text-[11px] text-white/70">
-                  Portal PPID — Informasi Publik
-                </p>
-              )}
-              {isScrolled && (
-                <p className="text-[11px] text-neutral-500">
-                  Portal PPID — Informasi Publik
-                </p>
-              )}
-            </div>
+          <Link href="/" className="flex items-center">
+            {overlay && !isScrolled ? (
+              // Mode transparan di atas hero: logo diberi frame putih agar tetap terbaca
+              <span className="rounded-lg bg-white/95 px-3 py-2 shadow-sm backdrop-blur">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo-ppid.png"
+                  alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
+                  className="h-10 w-auto"
+                />
+              </span>
+            ) : (
+              // Logo asli PPID (dari situs lama, self-hosted di /public)
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src="/logo-ppid.png"
+                alt="PPID PT Jamkrida Bali Mandara (Perseroda)"
+                className="h-12 w-auto"
+              />
+            )}
           </Link>
 
           {/* Desktop nav */}

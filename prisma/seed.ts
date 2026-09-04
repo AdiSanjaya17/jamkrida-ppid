@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // --- Admin default (GANTI PASSWORD INI SEGERA SETELAH LOGIN PERTAMA) ---
-  const passwordHash = await bcrypt.hash("Jamkridabali15", 10);
+  const passwordHash = await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD ?? "Jamkridabali15", 10);
   await prisma.user.upsert({
     where: { email: "admin@jamkridabali.co.id" },
     update: {},
@@ -176,10 +176,13 @@ async function main() {
   }
 
   // --- Objek Riil dari Website Lama PPID Jamkrida Bali ---
+  // Seed script berjalan tanpa sesi NextAuth — izinkan lewat guard requireAdmin
+  const { allowUnauthenticatedSeed } = await import("../lib/auth/require-admin");
+  allowUnauthenticatedSeed();
   const { populateRealJamkridaData } = await import("../lib/actions/seed-data");
   await populateRealJamkridaData();
 
-  console.log("Seed selesai dengan data riil PPID Jamkrida Bali. Login dengan admin@jamkridabali.co.id / Jamkridabali15");
+  console.log("Seed selesai dengan data riil PPID Jamkrida Bali. Login dengan admin@jamkridabali.co.id (password sesuai SEED_ADMIN_PASSWORD di .env)");
 }
 
 main()

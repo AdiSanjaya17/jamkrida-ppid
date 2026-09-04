@@ -2,8 +2,12 @@
 
 import { prisma } from "@/lib/prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export async function populateRealJamkridaData() {
+  // Guard: dipanggil dari CMS (wajib admin) atau dari script seed
+  // (prisma/seed.ts memanggil allowUnauthenticatedSeed() terlebih dahulu).
+  await requireAdmin();
   // 1. Dokumen Resmi
   const documentsData = [
     {

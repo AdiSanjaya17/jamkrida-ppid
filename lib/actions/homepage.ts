@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export type HeroSlideInput = {
   title: string;
@@ -18,6 +19,7 @@ export type HeroSlideInput = {
 };
 
 export async function createHeroSlide(input: HeroSlideInput) {
+  await requireAdmin();
   const last = await prisma.heroSlide.findFirst({
     orderBy: { order: "desc" },
   });
@@ -34,6 +36,7 @@ export async function createHeroSlide(input: HeroSlideInput) {
 }
 
 export async function updateHeroSlide(id: string, input: HeroSlideInput) {
+  await requireAdmin();
   const slide = await prisma.heroSlide.update({
     where: { id },
     data: input,
@@ -44,11 +47,13 @@ export async function updateHeroSlide(id: string, input: HeroSlideInput) {
 }
 
 export async function deleteHeroSlide(id: string) {
+  await requireAdmin();
   await prisma.heroSlide.delete({ where: { id } });
   revalidatePath("/admin/homepage");
 }
 
 export async function moveHeroSlide(id: string, direction: "up" | "down") {
+  await requireAdmin();
   const current = await prisma.heroSlide.findUnique({ where: { id } });
   if (!current) return;
 
@@ -82,6 +87,7 @@ export async function updateHomepageSection(
     content?: string | null;
   }
 ) {
+  await requireAdmin();
   const section = await prisma.homepageSection.update({
     where: { id },
     data: input,

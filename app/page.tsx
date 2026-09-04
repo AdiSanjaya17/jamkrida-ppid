@@ -65,13 +65,19 @@ export default async function HomePage() {
   const scStat = getSectionData(sectionRows, "statistik") as Record<string, any>;
   const scBerita = getSectionData(sectionRows, "berita_terbaru") as Record<string, any>;
   const scMitra = getSectionData(sectionRows, "mitra") as Record<string, any>;
-  const infoCategories = infoCategoryIcons.map((Icon, i) => ({
-    num: String(scInfo[`cat${i + 1}Num`] ?? ""),
-    title: String(scInfo[`cat${i + 1}Title`] ?? ""),
-    desc: String(scInfo[`cat${i + 1}Desc`] ?? ""),
-    href: String(scInfo[`cat${i + 1}Href`] ?? "#"),
-    icon: Icon,
-  }));
+  const infoCats: Record<string, unknown>[] = Array.isArray(scInfo.cats)
+    ? (scInfo.cats as Record<string, unknown>[])
+    : [];
+  const infoCategories = infoCategoryIcons.map((Icon, i) => {
+    const c = infoCats[i] ?? {};
+    return {
+      num: String(c.num ?? String(i + 1).padStart(2, "0")),
+      title: String(c.title ?? ""),
+      desc: String(c.desc ?? ""),
+      href: String(c.href ?? "#"),
+      icon: Icon,
+    };
+  }).filter((c) => c.title);
   const nav: PublicNavItem[] = navItems.map((item) => ({
     id: item.id,
     title: item.title,
@@ -95,6 +101,28 @@ export default async function HomePage() {
   }));
   const siteSettings = Object.fromEntries(settings.map((s) => [s.key, s.value]));
   const [featured, ...related] = news;
+
+  // Data section berformat array (baru) — dipakai lintas section
+  const infoCards = (Array.isArray(scInfo.cards) ? (scInfo.cards as Record<string, unknown>[]) : []).slice(0, 2);
+  const infoCard0 = (infoCards[0] ?? {}) as Record<string, unknown>;
+  const infoCard1 = (infoCards[1] ?? {}) as Record<string, unknown>;
+  const layananSchedules = Array.isArray(scLayanan.schedules) ? (scLayanan.schedules as Record<string, unknown>[]) : [];
+  const layananPetugas = Array.isArray(scLayanan.petugas) ? (scLayanan.petugas as Record<string, unknown>[]) : [];
+  const statItemsFallback = (Array.isArray(scStat.stats) ? (scStat.stats as Record<string, unknown>[]) : []).map((s) => ({
+    label: String(s.label ?? ""),
+    value:
+      s.source === "documents"
+        ? docCount > 0
+          ? String(docCount)
+          : null
+        : s.source === "information"
+          ? infoCount > 0
+            ? String(infoCount)
+            : null
+          : s.value
+            ? String(s.value)
+            : null,
+  }));
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -204,21 +232,21 @@ export default async function HomePage() {
                      <Database className="h-6 w-6" />
                    </div>
                    <div>
-                     <h3 className="text-xl font-bold text-neutral-900">{str(scInfo.card1Title, "")}</h3>
-                     <p className="text-sm text-neutral-500">{str(scInfo.card1Tag, "")}</p>
+                     <h3 className="text-xl font-bold text-neutral-900">{str(infoCard0.title, "")}</h3>
+                     <p className="text-sm text-neutral-500">{str(infoCard0.tag, "")}</p>
                    </div>
                  </div>
                  <p className="mt-5 leading-relaxed text-neutral-700">
-                   {str(scInfo.card1Desc, "")}
+                   {str(infoCard0.desc, "")}
                  </p>
                </div>
                <div className="mt-8 flex items-center justify-between border-t border-neutral-100 pt-5">
-                 <span className="text-sm text-neutral-500">{str(scInfo.card1Meta, "")}</span>
+                 <span className="text-sm text-neutral-500">{str(infoCard0.meta, "")}</span>
                  <Link
-                   href={str(scInfo.card1Href, "#")}
+                   href={str(infoCard0.href, "#")}
                    className="rounded-md border border-neutral-300 px-5 py-2 text-sm font-bold text-neutral-800 transition hover:border-brand hover:text-brand"
                  >
-                   {str(scInfo.card1Btn, "")}
+                   {str(infoCard0.btn, "")}
                  </Link>
                </div>
             </div>
@@ -231,22 +259,22 @@ export default async function HomePage() {
                    </div>
                    <div>
                      <h3 className="text-xl font-bold text-neutral-900">
-                       {str(scInfo.card2Title, "")}
+                       {str(infoCard1.title, "")}
                      </h3>
-                     <p className="text-sm text-neutral-500">{str(scInfo.card2Tag, "")}</p>
+                     <p className="text-sm text-neutral-500">{str(infoCard1.tag, "")}</p>
                    </div>
                  </div>
                  <p className="mt-5 leading-relaxed text-neutral-700">
-                   {str(scInfo.card2Desc, "")}
+                   {str(infoCard1.desc, "")}
                  </p>
                </div>
                <div className="mt-8 flex items-center justify-between border-t border-neutral-100 pt-5">
-                 <span className="text-sm text-neutral-500">{str(scInfo.card2Meta, "")}</span>
+                 <span className="text-sm text-neutral-500">{str(infoCard1.meta, "")}</span>
                  <Link
-                   href={str(scInfo.card2Href, "#")}
+                   href={str(infoCard1.href, "#")}
                    className="rounded-md border border-neutral-300 px-5 py-2 text-sm font-bold text-neutral-800 transition hover:border-brand hover:text-brand"
                  >
-                   {str(scInfo.card2Btn, "")}
+                   {str(infoCard1.btn, "")}
                  </Link>
                </div>
             </div>
@@ -274,12 +302,12 @@ export default async function HomePage() {
                    </p>
                    <div className="mt-4 grid grid-cols-2 gap-3">
                      <div className="rounded-xl bg-neutral-50 p-4">
-                       <p className="text-sm font-bold text-neutral-900">{str(scLayanan.sched1Days, "")}</p>
-                       <p className="mt-1 text-sm text-neutral-600">{str(scLayanan.sched1Time, "")}</p>
+                       <p className="text-sm font-bold text-neutral-900">{str(layananSchedules[0]?.days, "")}</p>
+                       <p className="mt-1 text-sm text-neutral-600">{str(layananSchedules[0]?.time, "")}</p>
                      </div>
                      <div className="rounded-xl bg-neutral-50 p-4">
-                       <p className="text-sm font-bold text-neutral-900">{str(scLayanan.sched2Days, "")}</p>
-                       <p className="mt-1 text-sm text-neutral-600">{str(scLayanan.sched2Time, "")}</p>
+                       <p className="text-sm font-bold text-neutral-900">{str(layananSchedules[1]?.days, "")}</p>
+                       <p className="mt-1 text-sm text-neutral-600">{str(layananSchedules[1]?.time, "")}</p>
                      </div>
                    </div>
                  </div>
@@ -318,14 +346,14 @@ export default async function HomePage() {
                  <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                    {[
                      {
-                       initial: str(scLayanan.petugas1Initial, "W"),
-                       name: str(scLayanan.petugas1Name, ""),
-                       role: str(scLayanan.petugas1Role, ""),
+                       initial: str(layananPetugas[0]?.initial, "W"),
+                       name: str(layananPetugas[0]?.name, ""),
+                       role: str(layananPetugas[0]?.role, ""),
                      },
                      {
-                       initial: str(scLayanan.petugas2Initial, "M"),
-                       name: str(scLayanan.petugas2Name, ""),
-                       role: str(scLayanan.petugas2Role, ""),
+                       initial: str(layananPetugas[1]?.initial, "M"),
+                       name: str(layananPetugas[1]?.name, ""),
+                       role: str(layananPetugas[1]?.role, ""),
                      },
                     ].map((p, idx) => (
                       <div
@@ -389,10 +417,10 @@ export default async function HomePage() {
                 {(statistics && statistics.length > 0
                   ? statistics.map((s) => ({ label: s.title, value: s.value }))
                   : [
-                      { label: scStat.s1Label || "Dokumen Publik", value: docCount > 0 ? String(docCount) : null },
-                      { label: scStat.s2Label || "Informasi Tersedia", value: infoCount > 0 ? String(infoCount) : null },
-                      { label: scStat.s3Label || "Permohonan Informasi", value: scStat.s3Value || null },
-                      { label: scStat.s4Label || "Tingkat Penyelesaian", value: scStat.s4Value || null },
+                      { label: statItemsFallback[0]?.label || "Dokumen Publik", value: docCount > 0 ? String(docCount) : null },
+                      { label: statItemsFallback[1]?.label || "Informasi Tersedia", value: infoCount > 0 ? String(infoCount) : null },
+                      { label: statItemsFallback[2]?.label || "Permohonan Informasi", value: statItemsFallback[2]?.value || null },
+                      { label: statItemsFallback[3]?.label || "Tingkat Penyelesaian", value: statItemsFallback[3]?.value || null },
                     ]
                 ).map((stat, idx) => (
                   <div

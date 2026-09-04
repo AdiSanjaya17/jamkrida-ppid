@@ -27,9 +27,9 @@
 > Database saat ini: **MySQL Laragon** (`jamkrida-ppid`, user `root`, tanpa password). Prisma provider sudah diubah dari PostgreSQL ke MySQL.
 
 1. `npm install`
-2. Isi `.env` — `DATABASE_URL="mysql://root@localhost:3306/jamkrida-ppid"` dan `AUTH_SECRET` (`npx auth secret`)
+2. Isi `.env` — `DATABASE_URL="mysql://root@localhost:3306/jamkrida-ppid"`, `AUTH_SECRET` (`npx auth secret`), dan **`SEED_ADMIN_PASSWORD`** (password admin yang akan dibuat/di-reset oleh seed — jika tidak diset, dipakai password default dan muncul peringatan)
 3. `npm run db:migrate` — membuat tabel di database
-4. `npm run db:seed` — membuat akun admin default: `admin@jamkridabali.co.id` / `Jamkridabali15` — **ganti password ini segera, ini kredensial contoh yang sekarang tertulis di kode**
+4. `npm run db:seed` — membuat akun admin default: `admin@jamkridabali.co.id` + password dari `SEED_ADMIN_PASSWORD` — **ganti password ini segera setelah login pertama**
 5. `npm run dev` — buka `http://localhost:3000/admin/login`
 
 ## Prasyarat sebelum lanjut ke Fase 10 (Search, SEO, aksesibilitas)
@@ -110,7 +110,7 @@
 - `/karir` — Lowongan pekerjaan
 - `/agenda` — Agenda kegiatan
 
-**Menu Laporan (5 halaman):**
+**Menu Laporan (6 halaman):**
 - `/laporan-tahunan` — Laporan tahunan
 - `/laporan-auditor` — Laporan auditor
 - `/laporan-keuangan` — Laporan keuangan
@@ -156,4 +156,4 @@
 - `/lib/cloudinary.ts` — Cloudinary configuration
 - `/components/public/site-footer.tsx` — Footer display
 - `/prisma/seed.ts` — Default settings seed
-- `/app/[halaman]/page.tsx` — 31 halaman publik (routes dinamis dari database)
+- `/app/[halaman]/page.tsx` — (catatan: halaman publik dibuat sebagai route eksplisit per-halaman di `app/`, bukan lewat route dinamis `[halaman]` — total 33 halaman publik)

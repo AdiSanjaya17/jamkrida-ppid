@@ -25,6 +25,18 @@ export default async function BeritaPage() {
     prisma.news.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { publishedAt: "desc" },
+      // Kolom `content` bisa sangat besar — tidak dipakai di halaman list,
+      // jadi tidak diambil untuk menghemat payload query.
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        thumbnailUrl: true,
+        category: true,
+        publishedAt: true,
+        createdAt: true,
+      },
     }),
   ]);
 
@@ -42,7 +54,6 @@ export default async function BeritaPage() {
     title: n.title,
     slug: n.slug,
     excerpt: n.excerpt,
-    content: n.content,
     thumbnailUrl: n.thumbnailUrl,
     category: n.category,
     publishedAt: n.publishedAt,

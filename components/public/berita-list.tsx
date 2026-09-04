@@ -19,7 +19,6 @@ export type NewsItem = {
   title: string;
   slug: string;
   excerpt: string | null;
-  content: string;
   thumbnailUrl: string | null;
   category: string | null;
   publishedAt: Date | null;

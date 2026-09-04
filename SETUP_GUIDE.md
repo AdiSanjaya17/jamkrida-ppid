@@ -27,7 +27,7 @@ npm run dev            # Server akan berjalan di http://localhost:3000
 **Login:**
 - URL: `http://localhost:3000/admin/login`
 - Email: `admin@jamkridabali.co.id`
-- Password: `Jamkridabali15`
+- Password: sesuai `SEED_ADMIN_PASSWORD` di `.env` (default bawaan jika tidak diset)
 - ⚠️ **GANTI PASSWORD SEGERA** setelah login pertama kali
 
 **Features yang bisa di-test:**

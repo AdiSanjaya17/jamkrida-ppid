@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 // Whitelist model yang boleh diakses dari CMS
 const delegates = {
@@ -53,6 +54,7 @@ export async function saveContentItem(
   id: string | null,
   raw: Record<string, unknown>
 ) {
+  await requireAdmin();
   const delegate = delegates[model] as unknown as {
     update: (args: { where: { id: string }; data: Record<string, unknown> }) => Promise<unknown>;
     create: (args: { data: Record<string, unknown> }) => Promise<unknown>;
@@ -115,9 +117,11 @@ export async function saveContentItem(
   };
   revalidatePath(adminPaths[model]);
   revalidatePath("/");
+  revalidatePath("/berita");
 }
 
 export async function deleteContentItem(model: ContentModel, id: string) {
+  await requireAdmin();
   const delegate = delegates[model] as unknown as {
     delete: (args: { where: { id: string } }) => Promise<unknown>;
   };
@@ -134,4 +138,5 @@ export async function deleteContentItem(model: ContentModel, id: string) {
   };
   revalidatePath(adminPaths[model]);
   revalidatePath("/");
+  revalidatePath("/berita");
 }

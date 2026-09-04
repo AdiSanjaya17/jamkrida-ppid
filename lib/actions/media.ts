@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma/client";
 import cloudinary, { isCloudinaryConfigured } from "@/lib/cloudinary";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 const MAX_SIZE_MB = 10;
 
@@ -11,6 +12,7 @@ export type UploadResult =
   | { ok: false; error: string };
 
 export async function uploadMedia(formData: FormData): Promise<UploadResult> {
+  await requireAdmin();
   if (!isCloudinaryConfigured()) {
     return {
       ok: false,
@@ -67,6 +69,7 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
 }
 
 export async function deleteMedia(id: string) {
+  await requireAdmin();
   const media = await prisma.media.findUnique({ where: { id } });
   if (!media) return;
 
@@ -85,6 +88,7 @@ export async function deleteMedia(id: string) {
 }
 
 export async function updateMediaAlt(id: string, altText: string) {
+  await requireAdmin();
   await prisma.media.update({ where: { id }, data: { altText } });
   revalidatePath("/admin/media");
 }
@@ -93,6 +97,7 @@ export async function addMediaFromUrl(
   url: string,
   fileName: string
 ): Promise<UploadResult> {
+  await requireAdmin();
   if (!url || !url.trim()) {
     return { ok: false, error: "URL tidak boleh kosong" };
   }
@@ -127,6 +132,7 @@ export async function addMediaFromUrl(
 }
 
 export async function getMediaList() {
+  await requireAdmin();
   try {
     return await prisma.media.findMany({
       orderBy: { createdAt: "desc" },

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export type NavigationInput = {
   title: string;
@@ -13,6 +14,7 @@ export type NavigationInput = {
 };
 
 export async function createNavigationItem(input: NavigationInput) {
+  await requireAdmin();
   const last = await prisma.navigationItem.findFirst({
     where: { parentId: input.parentId ?? null },
     orderBy: { order: "desc" },
@@ -38,6 +40,7 @@ export async function updateNavigationItem(
   id: string,
   input: NavigationInput
 ) {
+  await requireAdmin();
   const item = await prisma.navigationItem.update({
     where: { id },
     data: {
@@ -55,6 +58,7 @@ export async function updateNavigationItem(
 
 export async function deleteNavigationItem(id: string) {
   // onDelete: Cascade — anak-anaknya ikut terhapus.
+  await requireAdmin();
   await prisma.navigationItem.delete({ where: { id } });
   revalidatePath("/admin/navigation");
 }
@@ -63,6 +67,7 @@ export async function reorderNavigationItems(
   ids: string[],
   parentId: string | null
 ) {
+  await requireAdmin();
   await prisma.$transaction(
     ids.map((id, index) =>
       prisma.navigationItem.update({
