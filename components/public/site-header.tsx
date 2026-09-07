@@ -35,19 +35,34 @@ export function SiteHeader({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Kunci scroll halaman saat menu mobile terbuka, agar yang di-scroll
+  // adalah panel menu (bukan halaman di belakangnya).
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [mobileOpen]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Navbar berubah dari transparent ke solid saat scroll
-  const navbarStyle = isScrolled
+  // Navbar berubah dari transparent ke solid saat scroll.
+  // Saat menu mobile terbuka: paksa sticky solid agar tombol tutup selalu terlihat.
+  const navbarStyle = mobileOpen
+    ? "sticky top-0 z-50 border-b border-neutral-200 bg-white/95 backdrop-blur"
+    : isScrolled
     ? "sticky top-0 border-b border-neutral-200 bg-white/95 backdrop-blur"
     : overlay
       ? "absolute inset-x-0 top-0 bg-transparent"
       : "sticky top-0 border-b border-neutral-200 bg-white/95 backdrop-blur";
 
-  // Warna teks: putih saat transparent di atas, netral saat scroll/solid
-  const linkColor = isScrolled || !overlay
+  // Warna teks: putih saat transparent di atas, netral saat scroll/solid/menu terbuka
+  const linkColor = isScrolled || !overlay || mobileOpen
     ? "text-neutral-700 hover:bg-neutral-100 hover:text-brand"
     : "text-white/90 hover:bg-white/10 hover:text-white";
 
@@ -56,7 +71,7 @@ export function SiteHeader({
       <header className={`z-50 w-full transition-all duration-300 ${navbarStyle}`}>
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
           <Link href="/" className="flex items-center gap-3">
-            {overlay && !isScrolled ? (
+            {overlay && !isScrolled && !mobileOpen ? (
               // Mode transparan di atas hero: logo tanpa frame + teks putih
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -153,7 +168,7 @@ export function SiteHeader({
           </nav>
 
           <button
-            className={`rounded-md p-2 lg:hidden ${isScrolled || !overlay
+            className={`rounded-md p-2 lg:hidden ${isScrolled || !overlay || mobileOpen
                 ? "text-neutral-700 hover:bg-neutral-100"
                 : "text-white hover:bg-white/10"
               }`}
@@ -164,9 +179,9 @@ export function SiteHeader({
           </button>
         </div>
 
-        {/* Mobile nav */}
+        {/* Mobile nav — panel fixed mengisi sisa layar, scroll mandiri */}
         {mobileOpen && (
-          <nav className="menu-enter border-t border-neutral-200 bg-white px-4 py-3 lg:hidden">
+          <nav className="menu-enter fixed inset-x-0 bottom-0 top-20 z-50 overflow-y-auto overscroll-contain border-t border-neutral-200 bg-white px-4 pb-6 pt-3 shadow-xl lg:hidden">
             {navItems.map((item) => (
               <div key={item.id} className="py-1">
                 <Link
